@@ -68,7 +68,7 @@ const Dashboard: React.FC = () => {
             </Link>
           )}
           
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg shadow-md p-6 text-white">
+          <div className="bg-linear-to-br from-blue-600 to-indigo-700 rounded-lg shadow-md p-6 text-white">
             <h3 className="text-lg font-semibold mb-2">Quick Start Guide</h3>
             <ul className="text-sm space-y-1 opacity-90">
               <li>1. Create a new session</li>
