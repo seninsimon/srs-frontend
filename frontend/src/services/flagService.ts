@@ -7,6 +7,7 @@ export interface Flag {
   createdBy: { id: string; username: string };
   type: 'manual';
   description: string;
+  screenshotUrl?: string;
   timestamp: string;
   createdAt: string;
 }
@@ -15,6 +16,7 @@ export interface CreateFlagData {
   sessionId: string;
   clientId?: string;
   description: string;
+  screenshotUrl?: string;
   timestamp: string;
 }
 
@@ -26,6 +28,11 @@ export const flagService = {
   
   async getSessionFlags(sessionId: string): Promise<Flag[]> {
     const response = await api.get(`/flags/session/${sessionId}`);
+    return response.data;
+  },
+
+  async getAllFlags(): Promise<Flag[]> {
+    const response = await api.get('/flags');
     return response.data;
   },
 };

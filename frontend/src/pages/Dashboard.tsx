@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { Navbar } from '../components/common/Navbar';
-import { LayoutDashboard, Users } from 'lucide-react';
+import { LayoutDashboard, Users, Flag } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
   const { currentUser, isLoading } = useAuth();
@@ -34,6 +34,17 @@ const Dashboard: React.FC = () => {
               <span className="text-3xl font-bold text-gray-900">Sessions</span>
             </div>
             <p className="text-gray-600">Manage and monitor remote annotation sessions</p>
+          </Link>
+
+          <Link
+            to="/flags"
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <Flag size={32} className="text-red-600" />
+              <span className="text-3xl font-bold text-gray-900">Flags</span>
+            </div>
+            <p className="text-gray-600">View and manage flagged users and reports</p>
           </Link>
           
           {isSuperAdmin && (

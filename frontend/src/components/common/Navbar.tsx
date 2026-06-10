@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { Button } from './Button';
-import { Video, LogOut, LayoutDashboard, List, Users } from 'lucide-react';
+import { Video, LogOut, LayoutDashboard, List, Users, Flag } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { currentUser, logout } = useAuth();
@@ -13,6 +13,7 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Sessions', path: '/sessions', icon: List },
+    { name: 'Flags', path: '/flags', icon: Flag },
     ...(isSuperAdmin ? [{ name: 'Users', path: '/users', icon: Users }] : []),
   ];
   

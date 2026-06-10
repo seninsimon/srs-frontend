@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Maximize2, Camera, Monitor, Mic, Flag } from 'lucide-react';
+import { useScreenshot } from '../../hooks/useScreenshot';
 
 interface ClientCardProps {
   clientId: string;
@@ -8,7 +9,7 @@ interface ClientCardProps {
   screenStream?: MediaStream;
   hasAudio?: boolean;
   onExpand: () => void;
-  onFlag: () => void;
+  onFlag: (screenshot?: string) => void;
 }
 
 export const ClientCard: React.FC<ClientCardProps> = ({
@@ -21,6 +22,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
 }) => {
   const cameraVideoRef = useRef<HTMLVideoElement>(null);
   const screenVideoRef = useRef<HTMLVideoElement>(null);
+  const { takeScreenshotBase64 } = useScreenshot();
   
   useEffect(() => {
     if (cameraVideoRef.current && cameraStream) {
@@ -33,6 +35,19 @@ export const ClientCard: React.FC<ClientCardProps> = ({
       screenVideoRef.current.srcObject = screenStream;
     }
   }, [screenStream]);
+
+  const handleFlagClick = () => {
+    // Prefer screen stream for screenshot, fallback to camera
+    let screenshot: string | null = null;
+    
+    if (screenVideoRef.current && screenStream) {
+      screenshot = takeScreenshotBase64(screenVideoRef.current);
+    } else if (cameraVideoRef.current && cameraStream) {
+      screenshot = takeScreenshotBase64(cameraVideoRef.current);
+    }
+    
+    onFlag(screenshot || undefined);
+  };
   
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -48,7 +63,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
         </div>
         <div className="flex gap-2">
           <button
-            onClick={onFlag}
+            onClick={handleFlagClick}
             className="p-1.5 text-gray-500 hover:text-red-600 transition-colors"
             title="Create flag"
           >

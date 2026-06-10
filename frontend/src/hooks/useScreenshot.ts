@@ -30,6 +30,24 @@ export const useScreenshot = () => {
       }, 'image/png');
     });
   }, []);
+
+const takeScreenshotBase64 = useCallback(
+  (videoElement: HTMLVideoElement): string | null => {
+    if (!videoElement) return null;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+    return canvas.toDataURL('image/jpeg', 0.5);
+  },
+  []
+);
   
   const downloadScreenshot = useCallback((dataUrl: string, filename: string) => {
     const link = document.createElement('a');
@@ -38,5 +56,5 @@ export const useScreenshot = () => {
     link.click();
   }, []);
   
-  return { takeScreenshot, downloadScreenshot };
+  return { takeScreenshot, takeScreenshotBase64, downloadScreenshot };
 };

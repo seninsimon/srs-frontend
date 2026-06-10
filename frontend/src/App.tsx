@@ -6,6 +6,7 @@ import SessionsList from './pages/SessionsList';
 import SessionMonitor from './pages/SessionMonitor';
 import JoinSession from './pages/JoinSession';
 import UsersList from './pages/UsersList';
+import FlaggedUsers from './pages/FlaggedUsers';
 
 function PrivateRoute({ children, roles }: { children: React.ReactNode; roles?: string[] }) {
   const { user, isAuthenticated } = useAuthStore();
@@ -73,6 +74,14 @@ function App() {
           element={
             <PrivateRoute roles={['super_admin']}>
               <UsersList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/flags"
+          element={
+            <PrivateRoute roles={['super_admin', 'host']}>
+              <FlaggedUsers />
             </PrivateRoute>
           }
         />

@@ -31,6 +31,7 @@ const SessionMonitor: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [focusClient, setFocusClient] = useState<Client | null>(null);
   const [flagClient, setFlagClient] = useState<Client | null>(null);
+  const [flagScreenshot, setFlagScreenshot] = useState<string | undefined>(undefined);
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
   
   const { data: session, isLoading: sessionLoading } = useQuery({
@@ -104,13 +105,14 @@ const SessionMonitor: React.FC = () => {
     onStreamRemoved: handleStreamRemoved,
   });
   
-  const handleCreateFlag = async (description: string) => {
+  const handleCreateFlag = async (description: string, screenshot?: string) => {
     if (!flagClient) return;
     
     await createFlagMutation.mutateAsync({
       sessionId: sessionId!,
       clientId: flagClient.clientId,
       description,
+      screenshotUrl: screenshot,
       timestamp: new Date().toISOString(),
     });
   };
@@ -186,8 +188,9 @@ const SessionMonitor: React.FC = () => {
               screenStream={client.screenStream}
               hasAudio={false}
               onExpand={() => setFocusClient(client)}
-              onFlag={() => {
+              onFlag={(screenshot) => {
                 setFlagClient(client);
+                setFlagScreenshot(screenshot);
                 setIsFlagModalOpen(true);
               }}
             />
@@ -222,9 +225,11 @@ const SessionMonitor: React.FC = () => {
         onClose={() => {
           setIsFlagModalOpen(false);
           setFlagClient(null);
+          setFlagScreenshot(undefined);
         }}
         onSubmit={handleCreateFlag}
         clientName={flagClient?.displayName}
+        screenshot={flagScreenshot}
       />
     </div>
   );
