@@ -56,6 +56,7 @@ const JoinSession: React.FC = () => {
     sessionId: sessionId!,
     role: 'client',
     displayName: displayName || 'Anonymous',
+    enabled: isJoined
   });
   
   useClientWebRTC({
