@@ -31,7 +31,8 @@ const SessionMonitor: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [focusClient, setFocusClient] = useState<Client | null>(null);
   const [flagClient, setFlagClient] = useState<Client | null>(null);
-  const [flagScreenshot, setFlagScreenshot] = useState<string | undefined>(undefined);
+  const [flagCameraScreenshot, setFlagCameraScreenshot] = useState<string | undefined>(undefined);
+  const [flagScreenScreenshot, setFlagScreenScreenshot] = useState<string | undefined>(undefined);
   const [isFlagModalOpen, setIsFlagModalOpen] = useState(false);
   
   const { data: session, isLoading: sessionLoading } = useQuery({
@@ -105,14 +106,15 @@ const SessionMonitor: React.FC = () => {
     onStreamRemoved: handleStreamRemoved,
   });
   
-  const handleCreateFlag = async (description: string, screenshot?: string) => {
+  const handleCreateFlag = async (description: string, cameraScreenshot?: string, screenScreenshot?: string) => {
     if (!flagClient) return;
     
     await createFlagMutation.mutateAsync({
       sessionId: sessionId!,
       clientId: flagClient.clientId,
       description,
-      screenshotUrl: screenshot,
+      cameraScreenshot,
+      screenScreenshot,
       timestamp: new Date().toISOString(),
     });
   };
@@ -188,9 +190,10 @@ const SessionMonitor: React.FC = () => {
               screenStream={client.screenStream}
               hasAudio={false}
               onExpand={() => setFocusClient(client)}
-              onFlag={(screenshot) => {
+              onFlag={(cameraScreenshot, screenScreenshot) => {
                 setFlagClient(client);
-                setFlagScreenshot(screenshot);
+                setFlagCameraScreenshot(cameraScreenshot);
+                setFlagScreenScreenshot(screenScreenshot);
                 setIsFlagModalOpen(true);
               }}
             />
@@ -214,6 +217,12 @@ const SessionMonitor: React.FC = () => {
         <FocusMode
           isOpen={!!focusClient}
           onClose={() => setFocusClient(null)}
+          onFlag={(cameraScreenshot, screenScreenshot) => {
+            setFlagClient(focusClient);
+            setFlagCameraScreenshot(cameraScreenshot);
+            setFlagScreenScreenshot(screenScreenshot);
+            setIsFlagModalOpen(true);
+          }}
           clientName={focusClient.displayName}
           cameraStream={focusClient.cameraStream}
           screenStream={focusClient.screenStream}
@@ -225,11 +234,13 @@ const SessionMonitor: React.FC = () => {
         onClose={() => {
           setIsFlagModalOpen(false);
           setFlagClient(null);
-          setFlagScreenshot(undefined);
+          setFlagCameraScreenshot(undefined);
+          setFlagScreenScreenshot(undefined);
         }}
         onSubmit={handleCreateFlag}
         clientName={flagClient?.displayName}
-        screenshot={flagScreenshot}
+        cameraScreenshot={flagCameraScreenshot}
+        screenScreenshot={flagScreenScreenshot}
       />
     </div>
   );

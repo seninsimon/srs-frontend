@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Camera, Monitor, Mic } from 'lucide-react';
 
 interface ClientVideoProps {
@@ -8,14 +8,16 @@ interface ClientVideoProps {
   isAudioEnabled?: boolean;
 }
 
-export const ClientVideo: React.FC<ClientVideoProps> = ({
+export const ClientVideo = forwardRef<HTMLVideoElement, ClientVideoProps>(({
   stream,
   type,
   label,
   isAudioEnabled = false,
-}) => {
+}, ref) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  
+  useImperativeHandle(ref, () => videoRef.current!);
   
   useEffect(() => {
     if (videoRef.current && stream) {
@@ -61,4 +63,6 @@ export const ClientVideo: React.FC<ClientVideoProps> = ({
       </div>
     </div>
   );
-};
+});
+
+ClientVideo.displayName = 'ClientVideo';

@@ -7,7 +7,8 @@ export interface Flag {
   createdBy: { id: string; username: string };
   type: 'manual';
   description: string;
-  screenshotUrl?: string;
+  cameraScreenshot?: string;
+  screenScreenshot?: string;
   timestamp: string;
   createdAt: string;
 }
@@ -16,7 +17,8 @@ export interface CreateFlagData {
   sessionId: string;
   clientId?: string;
   description: string;
-  screenshotUrl?: string;
+  cameraScreenshot?: string;
+  screenScreenshot?: string;
   timestamp: string;
 }
 

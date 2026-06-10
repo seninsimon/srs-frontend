@@ -33,13 +33,41 @@ const FlaggedUsers: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {flags.map((flag) => (
               <div key={flag.id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
-                {flag.screenshotUrl && (
-                  <div className="aspect-video bg-gray-900 overflow-hidden">
-                    <img 
-                      src={flag.screenshotUrl} 
-                      alt="Flag evidence" 
-                      className="w-full h-full object-contain"
-                    />
+                {(flag.cameraScreenshot || flag.screenScreenshot) && (
+                  <div className="grid grid-cols-2 bg-gray-900 border-b border-gray-800">
+                    {flag.cameraScreenshot ? (
+                      <div className="aspect-video relative overflow-hidden group">
+                        <img 
+                          src={flag.cameraScreenshot} 
+                          alt="Camera evidence" 
+                          className="w-full h-full object-contain"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-[10px] text-white px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          Camera
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="aspect-video flex items-center justify-center bg-gray-800">
+                        <span className="text-gray-600 text-[10px]">No Camera</span>
+                      </div>
+                    )}
+                    
+                    {flag.screenScreenshot ? (
+                      <div className="aspect-video relative overflow-hidden group">
+                        <img 
+                          src={flag.screenScreenshot} 
+                          alt="Screen evidence" 
+                          className="w-full h-full object-contain"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-[10px] text-white px-1 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          Screen
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="aspect-video flex items-center justify-center bg-gray-800">
+                        <span className="text-gray-600 text-[10px]">No Screen</span>
+                      </div>
+                    )}
                   </div>
                 )}
                 

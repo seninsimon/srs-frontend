@@ -9,7 +9,7 @@ interface ClientCardProps {
   screenStream?: MediaStream;
   hasAudio?: boolean;
   onExpand: () => void;
-  onFlag: (screenshot?: string) => void;
+  onFlag: (cameraScreenshot?: string, screenScreenshot?: string) => void;
 }
 
 export const ClientCard: React.FC<ClientCardProps> = ({
@@ -37,16 +37,15 @@ export const ClientCard: React.FC<ClientCardProps> = ({
   }, [screenStream]);
 
   const handleFlagClick = () => {
-    // Prefer screen stream for screenshot, fallback to camera
-    let screenshot: string | null = null;
+    const cameraScreenshot = cameraVideoRef.current && cameraStream 
+      ? takeScreenshotBase64(cameraVideoRef.current) 
+      : null;
+      
+    const screenScreenshot = screenVideoRef.current && screenStream 
+      ? takeScreenshotBase64(screenVideoRef.current) 
+      : null;
     
-    if (screenVideoRef.current && screenStream) {
-      screenshot = takeScreenshotBase64(screenVideoRef.current);
-    } else if (cameraVideoRef.current && cameraStream) {
-      screenshot = takeScreenshotBase64(cameraVideoRef.current);
-    }
-    
-    onFlag(screenshot || undefined);
+    onFlag(cameraScreenshot || undefined, screenScreenshot || undefined);
   };
   
   return (
