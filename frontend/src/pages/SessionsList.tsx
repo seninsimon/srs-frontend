@@ -84,10 +84,12 @@ const SessionsList: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Sessions</h1>
-          <Button onClick={() => setIsCreateModalOpen(true)}>
-            <Plus size={16} className="mr-2" />
-            New Session
-          </Button>
+          {currentUser?.role === 'super_admin' && (
+            <Button onClick={() => setIsCreateModalOpen(true)}>
+              <Plus size={16} className="mr-2" />
+              New Session
+            </Button>
+          )}
         </div>
         
         <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -161,54 +163,60 @@ const SessionsList: React.FC = () => {
           
           {(!sessions || sessions.length === 0) && (
             <div className="text-center py-12">
-              <p className="text-gray-500">No sessions yet. Create your first session!</p>
+              <p className="text-gray-500">
+                {currentUser?.role === 'super_admin' 
+                  ? 'No sessions yet. Create your first session!' 
+                  : 'No sessions available.'}
+              </p>
             </div>
           )}
         </div>
       </div>
       
-      <Modal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        title="Create New Session"
-      >
-        <form onSubmit={handleCreateSession} className="space-y-4">
-          <Input
-            label="Session Title"
-            value={newSession.title}
-            onChange={(e) => setNewSession({ ...newSession, title: e.target.value })}
-            required
-          />
-          
-          <Input
-            label="Description (Optional)"
-            value={newSession.description}
-            onChange={(e) => setNewSession({ ...newSession, description: e.target.value })}
-          />
-          
-          {currentUser?.role === 'super_admin' && users && (
-            <select
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={newSession.assignedHost || ''}
-              onChange={(e) => setNewSession({ ...newSession, assignedHost: e.target.value })}
-            >
-              <option value="">Assign Host (Optional)</option>
-              {users.filter(u => u.role === 'host').map(user => (
-                <option key={user._id} value={user._id}>{user.username}</option>
-              ))}
-            </select>
-          )}
-          
-          <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={() => setIsCreateModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" isLoading={createSessionMutation.isPending}>
-              Create Session
-            </Button>
-          </div>
-        </form>
-      </Modal>
+      {currentUser?.role === 'super_admin' && (
+        <Modal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          title="Create New Session"
+        >
+          <form onSubmit={handleCreateSession} className="space-y-4">
+            <Input
+              label="Session Title"
+              value={newSession.title}
+              onChange={(e) => setNewSession({ ...newSession, title: e.target.value })}
+              required
+            />
+            
+            <Input
+              label="Description (Optional)"
+              value={newSession.description}
+              onChange={(e) => setNewSession({ ...newSession, description: e.target.value })}
+            />
+            
+            {users && (
+              <select
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={newSession.assignedHost || ''}
+                onChange={(e) => setNewSession({ ...newSession, assignedHost: e.target.value })}
+              >
+                <option value="">Assign Host (Optional)</option>
+                {users.filter(u => u.role === 'host').map(user => (
+                  <option key={user._id} value={user._id}>{user.username}</option>
+                ))}
+              </select>
+            )}
+            
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setIsCreateModalOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" isLoading={createSessionMutation.isPending}>
+                Create Session
+              </Button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 };
