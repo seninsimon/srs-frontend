@@ -22,7 +22,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
 }) => {
   const cameraVideoRef = useRef<HTMLVideoElement>(null);
   const screenVideoRef = useRef<HTMLVideoElement>(null);
-  const { takeScreenshotBase64 } = useScreenshot();
+  const { takeScreenshot} = useScreenshot();
   
   useEffect(() => {
     if (cameraVideoRef.current && cameraStream) {
@@ -36,17 +36,19 @@ export const ClientCard: React.FC<ClientCardProps> = ({
     }
   }, [screenStream]);
 
-  const handleFlagClick = () => {
-    const cameraScreenshot = cameraVideoRef.current && cameraStream 
-      ? takeScreenshotBase64(cameraVideoRef.current) 
-      : null;
-      
-    const screenScreenshot = screenVideoRef.current && screenStream 
-      ? takeScreenshotBase64(screenVideoRef.current) 
-      : null;
-    
-    onFlag(cameraScreenshot || undefined, screenScreenshot || undefined);
-  };
+const handleFlagClick = async () => {
+  const cameraScreenshot =
+    cameraVideoRef.current && cameraStream
+      ? await takeScreenshot(cameraVideoRef.current)
+      : undefined;
+
+  const screenScreenshot =
+    screenVideoRef.current && screenStream
+      ? await takeScreenshot(screenVideoRef.current)
+      : undefined;
+
+  onFlag(cameraScreenshot, screenScreenshot);
+};
   
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">

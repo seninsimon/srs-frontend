@@ -28,17 +28,22 @@ const FlaggedUsers: React.FC = () => {
           <Flag className="text-red-600" size={32} />
           <h1 className="text-2xl font-bold text-gray-900">Flagged Users</h1>
         </div>
+
+        
         
         {flags && flags.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
             {flags.map((flag) => (
               <div key={flag.id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
-                {(flag.cameraScreenshot || flag.screenScreenshot) && (
+                {(flag.metadata?.cameraScreenshotUrl || flag.metadata?.screenScreenshotUrl) && (
                   <div className="grid grid-cols-2 bg-gray-900 border-b border-gray-800">
-                    {flag.cameraScreenshot ? (
+                    
+                    {flag.metadata?.cameraScreenshotUrl ? (
                       <div className="aspect-video relative overflow-hidden group">
+                        
                         <img 
-                          src={flag.cameraScreenshot} 
+                          src={import.meta.env.VITE_BACKEND_URL + flag.metadata?.cameraScreenshotUrl} 
                           alt="Camera evidence" 
                           className="w-full h-full object-contain"
                         />
@@ -52,10 +57,10 @@ const FlaggedUsers: React.FC = () => {
                       </div>
                     )}
                     
-                    {flag.screenScreenshot ? (
+                    {flag.metadata?.screenScreenshotUrl ? (
                       <div className="aspect-video relative overflow-hidden group">
                         <img 
-                          src={flag.screenScreenshot} 
+                          src={import.meta.env.VITE_BACKEND_URL + flag.metadata?.screenScreenshotUrl} 
                           alt="Screen evidence" 
                           className="w-full h-full object-contain"
                         />
