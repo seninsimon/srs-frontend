@@ -10,6 +10,7 @@ import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
 import { Modal } from '../components/common/Modal';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { Navbar } from '../components/common/Navbar';
 import { useAuthStore } from '../store/authStore';
 
 const SessionsList: React.FC = () => {
@@ -17,7 +18,6 @@ const SessionsList: React.FC = () => {
   const queryClient = useQueryClient();
   const { user: currentUser } = useAuthStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [_joinLink, setJoinLink] = useState<string | null>(null);
   const [newSession, setNewSession] = useState<CreateSessionData>({ title: '', description: '' });
   
   const { data: sessions, isLoading } = useQuery({
@@ -52,13 +52,12 @@ const SessionsList: React.FC = () => {
   const generateLinkMutation = useMutation({
     mutationFn: sessionService.generateJoinLink,
     onSuccess: (data) => {
-      setJoinLink(data.joinUrl);
       navigator.clipboard.writeText(data.joinUrl);
       toast.success('Join link copied to clipboard');
     },
   });
   
-  const handleCreateSession = (e: React.FormEvent) => {
+  const handleCreateSession = (e: any) => {
     e.preventDefault();
     createSessionMutation.mutate(newSession);
   };
@@ -81,6 +80,7 @@ const SessionsList: React.FC = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
+      <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Sessions</h1>
@@ -194,7 +194,7 @@ const SessionsList: React.FC = () => {
             >
               <option value="">Assign Host (Optional)</option>
               {users.filter(u => u.role === 'host').map(user => (
-                <option key={user.id} value={user.id}>{user.username}</option>
+                <option key={user._id} value={user._id}>{user.username}</option>
               ))}
             </select>
           )}

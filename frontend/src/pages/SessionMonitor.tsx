@@ -13,6 +13,7 @@ import { SearchBar } from '../components/dashboard/SearchBar';
 import { FlagModal } from '../components/dashboard/FlagModal';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { Button } from '../components/common/Button';
+import { Navbar } from '../components/common/Navbar';
 
 interface Client {
   socketId: string;
@@ -141,6 +142,7 @@ const SessionMonitor: React.FC = () => {
   
   return (
     <div className="min-h-screen bg-gray-100">
+      <Navbar />
       <div className="bg-white shadow-sm border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">

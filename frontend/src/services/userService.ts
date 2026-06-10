@@ -1,7 +1,7 @@
 import api from './api';
 
 export interface User {
-  id: string;
+  _id: string;
   username: string;
   email: string;
   role: 'super_admin' | 'host';

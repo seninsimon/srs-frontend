@@ -8,6 +8,7 @@ import { Button } from '../components/common/Button';
 import { Input } from '../components/common/Input';
 import { Modal } from '../components/common/Modal';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { Navbar } from '../components/common/Navbar';
 
 const UsersList: React.FC = () => {
   const queryClient = useQueryClient();
@@ -67,7 +68,7 @@ const UsersList: React.FC = () => {
     createUserMutation.mutate(formData);
   };
   
-  const handleUpdate = (e: React.FormEvent) => {
+  const handleUpdate = (e: any) => {
     e.preventDefault();
     if (editingUser) {
       const updateData: Partial<User> & { password?: string } = {};
@@ -77,7 +78,7 @@ const UsersList: React.FC = () => {
       if (formData.role !== editingUser.role) updateData.role = formData.role;
       
       if (Object.keys(updateData).length > 0) {
-        updateUserMutation.mutate({ id: editingUser.id, data: updateData });
+        updateUserMutation.mutate({ id: editingUser._id, data: updateData });
       } else {
         setEditingUser(null);
       }
@@ -104,6 +105,7 @@ const UsersList: React.FC = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
+      <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
@@ -126,7 +128,7 @@ const UsersList: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {users?.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
+                <tr key={user._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {user.username}
                   </td>
@@ -153,7 +155,7 @@ const UsersList: React.FC = () => {
                         <Edit2 size={18} />
                       </button>
                       <button
-                        onClick={() => deleteUserMutation.mutate(user.id)}
+                        onClick={() => deleteUserMutation.mutate(user._id)}
                         className="text-red-600 hover:text-red-900"
                         title="Delete user"
                       >

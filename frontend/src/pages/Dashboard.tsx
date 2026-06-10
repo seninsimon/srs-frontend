@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Button } from '../components/common/Button';
-import { LayoutDashboard, Users, Video, LogOut } from 'lucide-react';
+import { Navbar } from '../components/common/Navbar';
+import { LayoutDashboard, Users } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
-  const { currentUser, logout, isLoading } = useAuth();
+  const { currentUser, isLoading } = useAuth();
   
   if (isLoading) {
     return (
@@ -19,26 +19,7 @@ const Dashboard: React.FC = () => {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Video className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-semibold text-gray-900">CrowdStream</span>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
-                {currentUser?.username} ({currentUser?.role})
-              </span>
-              <Button variant="outline" size="sm" onClick={() => logout()}>
-                <LogOut size={16} className="mr-2" />
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Dashboard</h1>
